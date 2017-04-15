@@ -1,13 +1,11 @@
 import Validation from 'data.validation';
+import Maybe from 'data.maybe';
+
 const { Success, Failure } = Validation;
 
 export default class Parser {
   constructor (fn) {
     this.fn = fn;
-  }
-
-  static of (fn) {
-    return new this(fn);
   }
 
   parse (input) {
@@ -68,16 +66,24 @@ export default class Parser {
     ));
   }
   
-  // :: A -> Parser<A>
-  static return (value) {
-    return Parser.of(input => Validation.of([value, input]));
-  }
-  
   // :: Parser<(A -> B)> -> Parser<A> -> Parser<B>
   apply (otherParser) {
     return this.andThen(otherParser).map(([f, x]) => f(x));
   }
   
+  opt () {
+    return this.map(Maybe.Just).orElse(Parser.return(Maybe.Nothing()));
+  }
+
+  static of (fn) {
+    return new this(fn);
+  }
+  
+  // :: A -> Parser<A>
+  static return (value) {
+    return Parser.of(input => Validation.of([value, input]));
+  }
+
   // :: f:(A -> B -> C) -> Parser<A> -> Parser<B> -> Parser<C>
   static lift2 (f) {
     return otherParser => anotherParser => 

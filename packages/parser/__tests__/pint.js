@@ -18,4 +18,8 @@ describe('pint', () => {
   it('should give feedback for non match', () => {
     expect(pint.parse('ABC').value).toEqual([`Expecting '9'. Got 'A'`]);
   });
+
+  it('should optionally handle negative number', () => {
+    expect(pint.parse('-123C').value).toEqual([-123, 'C']);
+  });
 });

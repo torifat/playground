@@ -7,13 +7,7 @@ import pstring from './pstring';
 import pint from './pint';
 import { choice, anyOf, range } from './helpers';
 
-console.log(pint.parse('1ABC'));
-console.log(pint.parse('12BC'));
-console.log(pint.parse('123C'));
-console.log(pint.parse('1234'));
-
-console.log(pint.parse('ABC'));
-
+// -----------------------------------------------------------------------------
 // const parseDigit = anyOf(range('0', '9'));
 // const parseThreeDigits = parseDigit.andThen(parseDigit).andThen(parseDigit);
 // const parseThreeDigitsAsStr = parseThreeDigits.map(([[c1, c2], c3]) => `${c1}${c2}${c3}`);
@@ -56,3 +50,18 @@ console.log(pint.parse('ABC'));
 // 
 // console.log(digits.parse('ABC'));;
 // // Failure "Expecting '9'. Got 'A'"
+
+// console.log(pint.parse('1ABC'));
+// console.log(pint.parse('12BC'));
+// console.log(pint.parse('123C'));
+// console.log(pint.parse('1234'));
+// 
+// console.log(pint.parse('ABC'));
+
+// const digit = anyOf(range('0', '9'));
+// const digitThenSemicolon = digit.andThen(pchar(';').opt());
+// 
+// console.log(digitThenSemicolon.parse('1;').value[0][1].isJust);
+// // Success (('1', Some ';'), "")
+// console.log(digitThenSemicolon.parse('1').value[0][1].isNothing);
+// // Success (('1', None), "")
