@@ -57,11 +57,30 @@ import { choice, anyOf, range } from './helpers';
 // console.log(pint.parse('1234'));
 // 
 // console.log(pint.parse('ABC'));
-
-// const digit = anyOf(range('0', '9'));
-// const digitThenSemicolon = digit.andThen(pchar(';').opt());
 // 
-// console.log(digitThenSemicolon.parse('1;').value[0][1].isJust);
+// const digit = anyOf(range('0', '9'));
+// const digitThenSemicolon = digit.andThenLeft(pchar(';').opt());
+// 
+// // console.log(digitThenSemicolon.parse('1;').value[0][1].isJust);
+// console.log(digitThenSemicolon.parse('1;'));
 // // Success (('1', Some ';'), "")
-// console.log(digitThenSemicolon.parse('1').value[0][1].isNothing);
+// console.log(digitThenSemicolon.parse('1'));
 // // Success (('1', None), "")
+
+// const whitespaceChar = anyOf([' ', '\t', '\n']);
+// const whitespace = whitespaceChar.many1();
+// 
+// const ab = pstring('AB');
+// const cd = pstring('CD');
+// const ab_cd = ab.andThenLeft(whitespace).andThen(cd);
+// 
+// console.log(ab_cd.parse('AB \t\nCD'));
+// // Success (("AB", "CD"), "")
+
+// const pdoublequote = pchar('"');
+// const quotedInteger = pint.between(pdoublequote)(pdoublequote)
+// 
+// console.log(quotedInteger.parse('"1234"'));
+// // Success (1234, "")
+// console.log(quotedInteger.parse('1234'));
+// // Failure "Expecting '"'. Got '1'"

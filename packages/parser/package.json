@@ -4,8 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "build": "rollup -c node:@playground/rollup-config",
-    "watch": "rollup -w -c node:@playground/rollup-config",
+    "build": "../../node_modules/.bin/rollup -c node:@playground/rollup-config",
+    "watch": "../../node_modules/.bin/rollup -w -c node:@playground/rollup-config",
     "test": "../../node_modules/.bin/jest"
   },
   "dependencies": {

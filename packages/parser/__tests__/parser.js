@@ -81,4 +81,37 @@ describe('Parser', () => {
       expect(many1A.parse('|BCD').value).toEqual('|');
     });
   });
+
+  describe('andThenLeft', () => {
+    const parseAB = charParser('A').andThenLeft(charParser('B'));
+
+    it('should only take value from left parser', () => {
+      expect(parseAB.parse('ABC').value).toEqual(['A', 'C']);
+    });
+  });
+  
+  describe('andThenRight', () => {
+    const parseAB = charParser('A').andThenRight(charParser('B'));
+
+    it('should only take value from right parser', () => {
+      expect(parseAB.parse('ABC').value).toEqual(['B', 'C']);
+    });
+  });
+  
+  describe('between', () => {
+    const lParser = charParser('L');
+    const rParser = charParser('R');
+    const parser = charParser('M').between(lParser)(rParser);
+
+    it('should only store value from the middle parser', () => {
+      expect(parser.parse('LMR').value).toEqual(['M', '']);
+      expect(parser.parse('LMRA').value).toEqual(['M', 'A']);
+    });
+    
+    it('should handle failure', () => {
+      const result = parser.parse('LMXR');
+      expect(result.value).toEqual('X');
+      expect(result.isFailure).toBeTruthy();
+    });
+  });
 });

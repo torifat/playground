@@ -74,6 +74,23 @@ export default class Parser {
   opt () {
     return this.map(Maybe.Just).orElse(Parser.return(Maybe.Nothing()));
   }
+  
+  // Keep only the result of the left side parser
+  // .>>
+  andThenLeft (otherParser) {
+    return this.andThen(otherParser).map(([a, ]) => a);
+  }
+
+  // Keep only the result of the left side parser
+  // >>.
+  andThenRight (otherParser) {
+    return this.andThen(otherParser).map(([, b]) => b);
+  }
+  
+  between (leftParser) {
+    return rightParser =>
+      leftParser.andThenRight(this).andThenLeft(rightParser);
+  }
 
   static of (fn) {
     return new this(fn);
