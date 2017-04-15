@@ -4,12 +4,24 @@ import Maybe from 'data.maybe';
 const { Success, Failure } = Validation;
 
 export default class Parser {
-  constructor (fn) {
-    this.fn = fn;
+  constructor (parseFn, label) {
+    this.parseFn = parseFn;
+    this.label = label;
+  }
+  
+  // Update the label in the parser
+  setLabel (label) {
+    this.label = label;
+    return this;
   }
 
+  // Update the label in the parser
+  getLabel (label) {
+    return this.label;
+  }
+  
   parse (input) {
-    return this.fn(input);
+    return this.parseFn(input);
   }
   
   parseZeroOrMore (input) {
@@ -49,8 +61,9 @@ export default class Parser {
   }
   
   andThen (otherParser) {
+    const label = `${this.getLabel()} andThen ${otherParser.getLabel}`;
     return this.bind(p1Result => otherParser.bind(p2Result => 
-      Parser.return([p1Result, p2Result])));
+      Parser.return([p1Result, p2Result]))).setLabel(label);
     // old implementation without bind
     // return Parser.of(input => this.parse(input).cata({
     //   Failure: Failure,
@@ -62,7 +75,9 @@ export default class Parser {
   }
 
   orElse (otherParser) {
-    return Parser.of(str => this.parse(str).orElse(() => otherParser.parse(str)));
+    const label = `${this.getLabel()} orElse ${otherParser.getLabel}`;
+    return Parser.of(str => 
+      this.parse(str).orElse(() => otherParser.parse(str)), label);
   }
   
   // :: f:(A -> B) -> Parser<A> -> Parser<B>
@@ -122,11 +137,11 @@ export default class Parser {
       // return error from parser1
       Failure: Failure,
       Success: ([value1, remainingInput]) => f(value1).parse(remainingInput)
-    }));
+    }), this.label);
   }
 
-  static of (fn) {
-    return new this(fn);
+  static of (fn, label = 'unknown') {
+    return new this(fn, label);
   }
   
   // :: A -> Parser<A>
@@ -151,4 +166,12 @@ export default class Parser {
     const [head, ...tail] = list;
     return consP(head)(Parser.sequence(tail));
   };
+  
+  static printResult (result) {
+    const out = result.cata({
+      Success: ([value, input]) => value,
+      Failure: ([label, error]) => `Error parsing ${label}\n${error}`
+    });
+    console.log(out);
+  }
 }

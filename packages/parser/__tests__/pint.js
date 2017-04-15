@@ -2,10 +2,11 @@ import pint from '../src/pint';
 
 describe('pint', () => {
   it('should handle empty or null input', () => {
-    expect(pint.parse().value).toEqual(['No more input']);
-    expect(pint.parse('').value).toEqual(['No more input']);
-    expect(pint.parse(null).value).toEqual(['No more input']);
-    expect(pint.parse(undefined).value).toEqual(['No more input']);
+    const err = ['9', 'No more input'];
+    expect(pint.parse().value).toEqual(err);
+    expect(pint.parse('').value).toEqual(err);
+    expect(pint.parse(null).value).toEqual(err);
+    expect(pint.parse(undefined).value).toEqual(err);
   });
 
   it('should parse integer and return the rest', () => {
@@ -16,7 +17,7 @@ describe('pint', () => {
   });
 
   it('should give feedback for non match', () => {
-    expect(pint.parse('ABC').value).toEqual([`Expecting '9'. Got 'A'`]);
+    expect(pint.parse('ABC').value).toEqual(['9', `Unexpected 'A'`]);
   });
 
   it('should optionally handle negative number', () => {

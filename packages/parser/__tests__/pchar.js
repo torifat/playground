@@ -4,10 +4,11 @@ describe('pchar', () => {
   const parseA = pchar('A');
 
   it('should handle empty or null input', () => {
-    expect(parseA.parse().value).toEqual(['No more input']);
-    expect(parseA.parse('').value).toEqual(['No more input']);
-    expect(parseA.parse(null).value).toEqual(['No more input']);
-    expect(parseA.parse(undefined).value).toEqual(['No more input']);
+    const err = ['A', 'No more input'];
+    expect(parseA.parse().value).toEqual(err);
+    expect(parseA.parse('').value).toEqual(err);
+    expect(parseA.parse(null).value).toEqual(err);
+    expect(parseA.parse(undefined).value).toEqual(err);
   });
   
   // TODO: Check with Success/Failure isEqual
@@ -19,9 +20,9 @@ describe('pchar', () => {
   });
 
   it('should give feedback for non match', () => {
-    const msg = `Expecting 'A'. Got 'B'`;
-    expect(parseA.parse('B').value).toEqual([msg]);
-    expect(parseA.parse('BC').value).toEqual([msg]);
-    expect(parseA.parse('BAC').value).toEqual([msg]);
+    const err = ['A', `Unexpected 'B'`];
+    expect(parseA.parse('B').value).toEqual(err);
+    expect(parseA.parse('BC').value).toEqual(err);
+    expect(parseA.parse('BAC').value).toEqual(err);
   });
 });
