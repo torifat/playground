@@ -114,4 +114,32 @@ describe('Parser', () => {
       expect(result.isFailure).toBeTruthy();
     });
   });
+  
+  describe('sepBy1', () => {
+    const parseListOfA = charParser('A').sepBy1(charParser(','));
+
+    it('should parse one or more occurrences of p separated by sep', () => {
+      expect(parseListOfA.parse('A').value).toEqual([['A'], '']);
+      expect(parseListOfA.parse('A,A,A').value).toEqual([['A', 'A', 'A'], '']);
+      expect(parseListOfA.parse('A,A,B').value).toEqual([['A', 'A'], ',B']);
+    });
+
+    it('should handle failure', () => {
+      const result = parseListOfA.parse('B,');
+      expect(result.value).toEqual('B');
+      expect(result.isFailure).toBeTruthy();
+    });
+  });
+
+  describe('sepBy', () => {
+    const parseListOfA = charParser('A').sepBy(charParser(','));
+
+    it('should parse zero or more occurrences of p separated by sep', () => {
+      expect(parseListOfA.parse('A').value).toEqual([['A'], '']);
+      expect(parseListOfA.parse('A,A,A').value).toEqual([['A', 'A', 'A'], '']);
+      expect(parseListOfA.parse('A,A,B').value).toEqual([['A', 'A'], ',B']);
+      expect(parseListOfA.parse(',B').value).toEqual([[], ',B']);
+    });
+  });
+
 });

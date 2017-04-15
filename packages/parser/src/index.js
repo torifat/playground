@@ -84,3 +84,27 @@ import { choice, anyOf, range } from './helpers';
 // // Success (1234, "")
 // console.log(quotedInteger.parse('1234'));
 // // Failure "Expecting '"'. Got '1'"
+
+// const comma = pchar(','); 
+// const digit = anyOf(range('0', '9'));
+// 
+// const zeroOrMoreDigitList = digit.sepBy(comma);
+// const oneOrMoreDigitList = digit.sepBy1(comma);
+// 
+// console.log(oneOrMoreDigitList.parse('1;'));
+// // Success (['1'], ";")
+// console.log(oneOrMoreDigitList.parse('1,2;'));
+// // Success (['1'; '2'], ";")
+// console.log(oneOrMoreDigitList.parse('1,2,3;'));
+// // Success (['1'; '2'; '3'], ";")
+// console.log(oneOrMoreDigitList.parse('Z;'));
+// // Failure "Expecting '9'. Got 'Z'"
+// 
+// console.log(zeroOrMoreDigitList.parse('1;'));
+// // Success (['1'], ";")
+// console.log(zeroOrMoreDigitList.parse('1,2;'));
+// // Success (['1'; '2'], ";")
+// console.log(zeroOrMoreDigitList.parse('1,2,3;'));
+// // Success (['1'; '2'; '3'], ";")
+// console.log(zeroOrMoreDigitList.parse('Z;'));
+// // Success ([], "Z;")

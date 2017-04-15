@@ -91,6 +91,17 @@ export default class Parser {
     return rightParser =>
       leftParser.andThenRight(this).andThenLeft(rightParser);
   }
+  
+  // Parses one or more occurrences of p separated by sep
+  sepBy1 (sepParser) {
+    return this.andThen(sepParser.andThenRight(this).many())
+      .map(([a, arr]) => [a, ...arr]);
+  }
+  
+  // Parses zero or more occurrences of p separated by sep
+  sepBy (sepParser) {
+    return this.sepBy1(sepParser).orElse(Parser.return([]));
+  }
 
   static of (fn) {
     return new this(fn);
