@@ -4,23 +4,40 @@ const { Success, Failure } = Validation;
 import Parser from './parser';
 import pchar from './pchar';
 
-// Choose any of a list of parsers
-export const choice = listOfParsers => listOfParsers.reduce((a, b) => a.orElse(b));
-
-// Choose any of a list of characters
-export const anyOf = listOfChars => 
-  choice(listOfChars.map(pchar)).setLabel(`any of ${listOfChars.join(', ')}`);
-
 export const satisfy = (predicate, label) => 
   Parser.of(input => {
-    if (!input) {
-      return Failure([label, 'No more input']);
-    }
-    const [ first ] = input;
-    return predicate(first) ?
-      Success([first, input.slice(1)]) :
-      Failure([label, `Unexpected '${first}'`]);
+    const [ remainingInput, charOpt ] = input.nextChar();
+    return charOpt.cata({
+      Nothing: () => {
+        return Failure([label, 'No more input', input.getParserPosition()]);
+      },
+      Just: first => {
+        return (predicate(first)) ?
+          Success([first, remainingInput]) :
+          Failure([label, `Unexpected '${first}'`, input.getParserPosition()])
+      }
+    });
   }, label);
+
+/// Parses a sequence of zero or more chars with the char parser cp. 
+/// It returns the parsed chars as a string.
+export const manyChars = cp => cp.many().map(charListToStr);
+
+/// Parses a sequence of one or more chars with the char parser cp. 
+/// It returns the parsed chars as a string.
+export const manyChars1 = cp => cp.many1().map(charListToStr);
+
+export const printResult = result => {
+  result.cata({
+    Success: ([ value, input ]) => console.log(value),
+    Failure: ([ label, error, pos ]) => {
+      const { line, column } = pos;
+      const errorLine = pos.currentLine();
+      const info = `Line:${line} Col:${column} Error parsing ${label}`;
+      console.log(`${info}\n${errorLine}\n${' '.repeat(column)}^ ${error}`);
+    }
+  });
+}
 
 // Non parser helper
 export const range = (start, end) => 

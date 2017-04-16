@@ -5,7 +5,7 @@ import Parser from './parser';
 import pchar from './pchar';
 import pstring from './pstring';
 import pint from './pint';
-import { choice, anyOf, satisfy, range } from './helpers';
+import { satisfy, range } from './helpers';
 
 // -----------------------------------------------------------------------------
 // const isDigit = x => x >= '0' && x <= '9';

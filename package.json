@@ -11,6 +11,8 @@
     "rollup-watch": "^3.2.2"
   },
   "jest": {
+    "testRegex": "/__tests__/(?!__).*",
+    "bail": true,
     "modulePathIgnorePatterns": [
       "packages/.*/build"
     ],

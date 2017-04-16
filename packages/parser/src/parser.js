@@ -1,7 +1,10 @@
 import Validation from 'data.validation';
 import Maybe from 'data.maybe';
 
+import InputState from './input-state';
+
 const { Success, Failure } = Validation;
+const { Just, Nothing } = Maybe;
 
 export default class Parser {
   constructor (parseFn, label) {
@@ -21,11 +24,19 @@ export default class Parser {
   }
   
   parse (input) {
+    return this.runOnInput(this.fromStr(input));
+  }
+  
+  runOnInput (input) {
     return this.parseFn(input);
   }
   
+  fromStr (str) {
+    return str ? InputState.of(str.split(['\r\n', '\n'])) : InputState.of();
+  }
+  
   parseZeroOrMore (input) {
-    return this.parse(input).cata({
+    return this.runOnInput(input).cata({
       Failure: _ => [[], input],
       Success: ([firstValue, inputAfterFirstParse]) => {
         // if parse succeeds, call recursively to get the subsequent values
@@ -77,7 +88,7 @@ export default class Parser {
   orElse (otherParser) {
     const label = `${this.getLabel()} orElse ${otherParser.getLabel}`;
     return Parser.of(str => 
-      this.parse(str).orElse(() => otherParser.parse(str)), label);
+      this.runOnInput(str).orElse(() => otherParser.runOnInput(str)), label);
   }
   
   // :: f:(A -> B) -> Parser<A> -> Parser<B>
@@ -133,10 +144,11 @@ export default class Parser {
   // and passes the output of p into f, to create a new parser
   // :: f:(A -> Parser<B>) -> Parser<A> -> Parser<B>
   bind (f) {
-    return Parser.of(input => this.parse(input).cata({
+    return Parser.of(input => this.runOnInput(input).cata({
       // return error from parser1
       Failure: Failure,
-      Success: ([value1, remainingInput]) => f(value1).parse(remainingInput)
+      Success: ([value1, remainingInput]) =>
+        f(value1).runOnInput(remainingInput)
     }), this.label);
   }
 
@@ -166,12 +178,4 @@ export default class Parser {
     const [head, ...tail] = list;
     return consP(head)(Parser.sequence(tail));
   };
-  
-  static printResult (result) {
-    const out = result.cata({
-      Success: ([value, input]) => value,
-      Failure: ([label, error]) => `Error parsing ${label}\n${error}`
-    });
-    console.log(out);
-  }
 }

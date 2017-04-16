@@ -1,8 +1,6 @@
-import Maybe from 'data.maybe';
-
-import Parser from './parser';
 import pchar from './pchar';
-import { choice, anyOf, range } from './helpers';
+import anyOf from './any-of';
+import { range } from './helpers';
 
 // define parser for one digit
 const digit = anyOf(range('0', '9'));
