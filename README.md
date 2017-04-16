@@ -1,5 +1,7 @@
 # Playground 👩🏻‍🔬
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/torifat/playground.svg)](https://greenkeeper.io/)
+
 ### 🙈🙉🙊
 
 | Packages | Description |
