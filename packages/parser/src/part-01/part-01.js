@@ -1,11 +1,11 @@
 import Validation from 'data.validation';
 const { Success, Failure } = Validation;
- 
+
 class Parser {
   constructor (fn) {
     this.fn = fn;
   }
-  
+
   static of (fn) {
     return new this(fn);
   }
@@ -13,7 +13,7 @@ class Parser {
   parse (str) {
     return this.fn(str);
   }
-  
+
   andThen (anotherParser) {
     return Parser.of(str => this.parse(str).cata({
       Failure: Failure,

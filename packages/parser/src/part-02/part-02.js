@@ -76,7 +76,7 @@ console.log(quotedInteger.parse('"1234"'));
 console.log(quotedInteger.parse('1234'));
 // Failure "Expecting '"'. Got '1'"
 
-const comma = pchar(','); 
+const comma = pchar(',');
 const digit = anyOf(range('0', '9'));
 
 const zeroOrMoreDigitList = digit.sepBy(comma);

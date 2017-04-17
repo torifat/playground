@@ -5,7 +5,7 @@ import Parser from './parser';
 
 const { Success, Failure } = Validation;
 
-export const satisfy = (predicate, label) => 
+export const satisfy = (predicate, label) =>
   Parser.of(input => {
     const [ remainingInput, charOpt ] = input.nextChar();
     return charOpt.cata({
@@ -23,11 +23,11 @@ export const satisfy = (predicate, label) =>
 
 const charListToStr = charList => charList.join('');
 
-/// Parses a sequence of zero or more chars with the char parser cp. 
+/// Parses a sequence of zero or more chars with the char parser cp.
 /// It returns the parsed chars as a string.
 export const manyChars = cp => cp.many().map(charListToStr);
 
-/// Parses a sequence of one or more chars with the char parser cp. 
+/// Parses a sequence of one or more chars with the char parser cp.
 /// It returns the parsed chars as a string.
 export const manyChars1 = cp => cp.many1().map(charListToStr);
 
@@ -52,8 +52,8 @@ export const printResult = result => {
 }
 
 // Non parser helper
-export const range = (start, end) => 
+export const range = (start, end) =>
   Array.from({
     length: (end.charCodeAt(0) - start.charCodeAt(0) + 1)
-  }, (v, k) => 
+  }, (v, k) =>
     String.fromCharCode(k + start.charCodeAt(0)));

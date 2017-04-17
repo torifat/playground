@@ -11,7 +11,7 @@ describe('pchar', () => {
     expect(parseA.parse(null).value).toEqual(err);
     expect(parseA.parse(undefined).value).toEqual(err);
   });
-  
+
   // TODO: Check with Success/Failure isEqual
   it('should parse `A` and return the rest', () => {
     expect(parseA.parse('A').value).toEqual(_s('A', ['A'], 1));

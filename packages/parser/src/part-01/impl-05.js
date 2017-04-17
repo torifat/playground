@@ -5,12 +5,12 @@
 
 import Validation from 'data.validation';
 const { Success, Failure } = Validation;
- 
+
 class Parser {
   constructor (fn) {
     this.fn = fn;
   }
-  
+
   static of (fn) {
     return new this(fn);
   }
