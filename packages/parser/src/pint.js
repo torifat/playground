@@ -1,18 +1,30 @@
 import pchar from './pchar';
-import anyOf from './any-of';
-import { range } from './helpers';
+import { satisfy, manyChars1 } from './helpers';
 
-// define parser for one digit
-const digit = anyOf(range('0', '9'));
+/// parse a digit
+const digitChar = satisfy((ch => /^\d$/.test(ch)), 'digit');
 
 // define parser for one or more digits
-const digits = digit.many1();
+const digits = manyChars1(digitChar);
 
-const resultToInt = ([sign, charList]) => sign.cata({
-  Just: () => -(charList.join('')),
-  Nothing: () => +(charList.join(''))
+const resultToInt = ([sign, digits]) => sign.cata({
+  Just: () => -digits,
+  Nothing: () => +digits
 });
 
-// map the digits to an int
+const resultToFloat = ([[[sign, digits1], point], digits2]) => {
+  const digits = `${digits1}.${digits2}`;
+  return sign.cata({
+    Just: () => -digits,
+    Nothing: () => +digits
+  });
+};
+
 // pint :: string -> Parser
-export default pchar('-').opt().andThen(digits).map(resultToInt);
+// an "int" is optional sign + one or more digits
+export const pint = pchar('-').opt().andThen(digits)
+  .map(resultToInt).setLabel('integer');
+
+// parse a float
+export const pfloat = pchar('-').opt().andThen(digits).andThen(pchar('.'))
+  .andThen(digits).map(resultToFloat).setLabel('float');

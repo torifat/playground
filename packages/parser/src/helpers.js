@@ -1,8 +1,9 @@
 import Validation from 'data.validation';
-const { Success, Failure } = Validation;
+import isWhitespace from 'is-whitespace-character';
 
 import Parser from './parser';
-import pchar from './pchar';
+
+const { Success, Failure } = Validation;
 
 export const satisfy = (predicate, label) => 
   Parser.of(input => {
@@ -19,6 +20,9 @@ export const satisfy = (predicate, label) =>
     });
   }, label);
 
+
+const charListToStr = charList => charList.join('');
+
 /// Parses a sequence of zero or more chars with the char parser cp. 
 /// It returns the parsed chars as a string.
 export const manyChars = cp => cp.many().map(charListToStr);
@@ -27,12 +31,20 @@ export const manyChars = cp => cp.many().map(charListToStr);
 /// It returns the parsed chars as a string.
 export const manyChars1 = cp => cp.many1().map(charListToStr);
 
+/// parse a whitespace char
+export const whitespaceChar = satisfy(isWhitespace, 'whitespace');
+
+/// parse zero or more whitespace char
+export const spaces = whitespaceChar.many();
+
+/// parse one or more whitespace char
+export const spaces1 = whitespaceChar.many1();
+
 export const printResult = result => {
   result.cata({
     Success: ([ value, input ]) => console.log(value),
     Failure: ([ label, error, pos ]) => {
-      const { line, column } = pos;
-      const errorLine = pos.currentLine();
+      const [errorLine, line, column] = pos;
       const info = `Line:${line} Col:${column} Error parsing ${label}`;
       console.log(`${info}\n${errorLine}\n${' '.repeat(column)}^ ${error}`);
     }
