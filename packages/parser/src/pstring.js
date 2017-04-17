@@ -5,4 +5,4 @@ import pchar from './pchar';
 // pstring :: TBD
 export default str => Parser.sequence(str.split('').map(pchar))
     // convert Parser<[char]> to Parser<string>
-    .map(arr => arr.join(''));
+    .map(arr => arr.join('')).setLabel(str);

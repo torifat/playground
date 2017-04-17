@@ -37,7 +37,7 @@ export default class Parser {
 
   parseZeroOrMore (input) {
     return this.runOnInput(input).cata({
-      Failure: _ => [[], input],
+      Failure: () => [[], input],
       Success: ([firstValue, inputAfterFirstParse]) => {
         // if parse succeeds, call recursively to get the subsequent values
         const [subsequentValues, remainingInput] =

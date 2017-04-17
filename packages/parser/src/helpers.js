@@ -20,6 +20,7 @@ export const satisfy = (predicate, label) =>
     });
   }, label);
 
+export const isDigit = ch => /^\d$/.test(ch);
 
 const charListToStr = charList => charList.join('');
 

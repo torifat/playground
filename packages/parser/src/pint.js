@@ -1,8 +1,8 @@
 import pchar from './pchar';
-import { satisfy, manyChars1 } from './helpers';
+import { satisfy, manyChars1, isDigit } from './helpers';
 
 /// parse a digit
-const digitChar = satisfy((ch => /^\d$/.test(ch)), 'digit');
+const digitChar = satisfy(isDigit, 'digit');
 
 // define parser for one or more digits
 const digits = manyChars1(digitChar);
