@@ -14,6 +14,6 @@
 - [ ] CircleCI
 - [ ] Codecov
 - [ ] Prettier
-- [ ] ESLint
+- [x] ESLint
 - [ ] Flow
 - [ ] Update README

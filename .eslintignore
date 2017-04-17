@@ -1,0 +1,7 @@
+packages/*/node_modules
+packages/*/lib
+packages/*/dist
+
+packages/parser/src/index.js
+packages/parser/src/json/index.js
+packages/parser/src/part-*

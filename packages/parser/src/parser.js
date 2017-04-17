@@ -1,7 +1,7 @@
 import Validation from 'data.validation';
 import Maybe from 'data.maybe';
 
-import InputState from './input-state';
+import InputState from './InputState';
 
 const { Success, Failure } = Validation;
 const { Just, Nothing } = Maybe;
@@ -19,7 +19,7 @@ export default class Parser {
   }
 
   // Update the label in the parser
-  getLabel (label) {
+  getLabel () {
     return this.label;
   }
 
@@ -109,7 +109,7 @@ export default class Parser {
   }
 
   opt () {
-    return this.map(Maybe.Just).orElse(Parser.return(Maybe.Nothing()));
+    return this.map(Just).orElse(Parser.return(Nothing()));
   }
 
   // Keep only the result of the left side parser
@@ -177,5 +177,5 @@ export default class Parser {
     }
     const [head, ...tail] = list;
     return consP(head)(Parser.sequence(tail));
-  };
+  }
 }

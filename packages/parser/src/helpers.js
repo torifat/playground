@@ -1,7 +1,7 @@
 import Validation from 'data.validation';
 import isWhitespace from 'is-whitespace-character';
 
-import Parser from './parser';
+import Parser from './Parser';
 
 const { Success, Failure } = Validation;
 
@@ -41,9 +41,20 @@ export const spaces = whitespaceChar.many();
 /// parse one or more whitespace char
 export const spaces1 = whitespaceChar.many1();
 
+// Forward references
+export const createParserForwardedToRef = () => {
+  const dummyParser = Parser.of((/*input*/) => {
+    throw new Error('unfixed forwarded parser');
+  }, 'unknown');
+  let parserRef = { parser: dummyParser };
+  const wrapperParser = Parser.of(input => parserRef.parser.runOnInput(input));
+  wrapperParser.ref = parserRef;
+  return wrapperParser;
+}
+
 export const printResult = result => {
   result.cata({
-    Success: ([ value, input ]) => console.log(value),
+    Success: ([ value/*, input */]) => console.log(value),
     Failure: ([ label, error, pos ]) => {
       const [errorLine, line, column] = pos;
       const info = `Line:${line} Col:${column} Error parsing ${label}`;

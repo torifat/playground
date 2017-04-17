@@ -1,4 +1,4 @@
-import Position from './position';
+import Position from './Position';
 import Maybe from 'data.maybe';
 
 const { Just, Nothing } = Maybe;

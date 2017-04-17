@@ -1,13 +1,15 @@
 import Validation from 'data.validation';
 const { Success, Failure } = Validation;
 
-import Parser from './parser';
-import Position from './position';
+import Parser from './Parser';
+import Position from './Position';
 import pchar from './pchar';
 import pstring from './pstring';
 import { pint, pfloat } from './pint';
 import { satisfy, printResult, range } from './helpers';
 import { jNull, jBool } from './json';
+
+// console.log(jBool.parse('true'));
 
 // -----------------------------------------------------------------------------
 // const isDigit = x => x >= '0' && x <= '9';

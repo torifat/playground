@@ -12,7 +12,7 @@ const resultToInt = ([sign, digits]) => sign.cata({
   Nothing: () => +digits
 });
 
-const resultToFloat = ([[[sign, digits1], point], digits2]) => {
+const resultToFloat = ([[[sign, digits1]/*, point*/], digits2]) => {
   const digits = `${digits1}.${digits2}`;
   return sign.cata({
     Just: () => -digits,

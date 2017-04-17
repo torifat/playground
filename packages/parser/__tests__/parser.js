@@ -1,8 +1,3 @@
-import Validation from 'data.validation';
-const { Success, Failure } = Validation;
-
-import Parser from '../src/parser';
-
 import pchar from '../src/pchar';
 import { _s, _ec } from './__helpers';
 
