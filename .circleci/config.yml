@@ -1,0 +1,11 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/playground
+    docker:
+      - image: node:7.9.0
+    steps:
+      - checkout
+      - run: yarn install
+      - run: yarn bootstrap
+      - run: yarn test

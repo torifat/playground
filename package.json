@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
+    "bootstrap": "lerna bootstrap",
     "test": "jest && codecov"
   },
   "devDependencies": {
