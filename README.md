@@ -13,8 +13,8 @@
 
 
 ## TODO
-- [ ] CircleCI
-- [ ] Codecov
+- [x] CircleCI
+- [x] Codecov
 - [ ] Prettier
 - [x] ESLint
 - [ ] Flow
