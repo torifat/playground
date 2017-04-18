@@ -3,9 +3,13 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "test": "jest && codecov"
+  },
   "devDependencies": {
     "babel-eslint": "^7.2.2",
     "babel-jest": "^19.0.0",
+    "codecov": "^2.1.0",
     "eslint": "^3.19.0",
     "eslint-plugin-flowtype": "^2.30.4",
     "eslint-plugin-jest": "^19.0.1",
@@ -24,7 +28,9 @@
       "/node_modules/",
       "/packages/.*/build"
     ],
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "coverageDirectory": "./coverage/",
+    "collectCoverage": true
   },
   "dependencies": {}
 }
