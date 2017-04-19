@@ -1,7 +1,9 @@
 // -----------------------------------------------------------------------------
 const parseDigit = anyOf(range('0', '9'));
 const parseThreeDigits = parseDigit.andThen(parseDigit).andThen(parseDigit);
-const parseThreeDigitsAsStr = parseThreeDigits.map(([[c1, c2], c3]) => `${c1}${c2}${c3}`);
+const parseThreeDigitsAsStr = parseThreeDigits.map(
+  ([[c1, c2], c3]) => `${c1}${c2}${c3}`
+);
 const parseThreeDigitsAsInt = parseThreeDigitsAsStr.map(Number.parseInt);
 console.log(run(parseThreeDigits)('123A'));
 console.log(run(parseThreeDigitsAsStr)('123A'));
@@ -30,16 +32,16 @@ const digit = anyOf(range('0', '9'));
 // define parser for one or more digits
 const digits = digit.many1();
 
-console.log(digits.parse('1ABC'));;
+console.log(digits.parse('1ABC'));
 // Success (['1'], "ABC")
-console.log(digits.parse('12BC'));;
+console.log(digits.parse('12BC'));
 // Success (['1'; '2'], "BC")
-console.log(digits.parse('123C'));;
+console.log(digits.parse('123C'));
 // Success (['1'; '2'; '3'], "C")
-console.log(digits.parse('1234'));;
+console.log(digits.parse('1234'));
 // Success (['1'; '2'; '3'; '4'], "")
 
-console.log(digits.parse('ABC'));;
+console.log(digits.parse('ABC'));
 // Failure "Expecting '9'. Got 'A'"
 
 console.log(pint.parse('1ABC'));
@@ -69,7 +71,7 @@ console.log(ab_cd.parse('AB \t\nCD'));
 // Success (("AB", "CD"), "")
 
 const pdoublequote = pchar('"');
-const quotedInteger = pint.between(pdoublequote)(pdoublequote)
+const quotedInteger = pint.between(pdoublequote)(pdoublequote);
 
 console.log(quotedInteger.parse('"1234"'));
 // Success (1234, "")

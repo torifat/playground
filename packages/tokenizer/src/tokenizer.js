@@ -3,7 +3,7 @@ import Token from './token';
 import Location from './location';
 
 export default class Tokenizer {
-  constructor (input: string) {
+  constructor(input: string) {
     this.input = input;
     this.index = 0;
     this.buffer = '';
@@ -11,26 +11,25 @@ export default class Tokenizer {
     this.column = 0;
   }
 
-  *tokens () {
+  *tokens() {
     do {
       // Skip whitespace
       if (this.peek() === ' ') {
         continue;
       }
-      yield(Token.of(this.peek(), Location.of(this.line, this.column)));
+      yield Token.of(this.peek(), Location.of(this.line, this.column));
     } while (this.forward());
   }
-  
-  peek (offset: number = 0) {
-    if ((this.index + offset) < this.input.length) {
+
+  peek(offset: number = 0) {
+    if (this.index + offset < this.input.length) {
       return this.input[this.index + offset];
-    }
-    else {
+    } else {
       throw new Error('Array Index Out of Bounds');
     }
   }
-  
-  forward (): boolean {
+
+  forward(): boolean {
     if (this.index + 1 < this.input.length) {
       if (this.isNewLine(this.peek())) {
         this.line++;
@@ -41,8 +40,8 @@ export default class Tokenizer {
     }
     return false;
   }
-  
-  isNewLine (char: string): boolean {
+
+  isNewLine(char: string): boolean {
     return char === '\n';
   }
 }

@@ -9,12 +9,11 @@ const { Success, Failure } = Validation;
 // pchar :: string -> string -> Result<[string, string], string>
 const pchar = chr => str => {
   if (!str) {
-   return Failure(['No more input']);
-  }
-  else if (str[0] === chr) {
-   return Success([chr, str.slice(1)]);
+    return Failure(['No more input']);
+  } else if (str[0] === chr) {
+    return Success([chr, str.slice(1)]);
   } else {
-   return Failure([`Expecting '${chr}'. Got '${str[0]}'`]);
+    return Failure([`Expecting '${chr}'. Got '${str[0]}'`]);
   }
 };
 

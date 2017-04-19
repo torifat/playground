@@ -12,5 +12,8 @@ let value = jValue.andThenLeft(spaces);
 // Parse an JArray
 
 // jArray
-export default value.sepBy1(comma).between(left)(right)
-  .map(values => JArray.of(values)).setLabel('array');
+export default value
+  .sepBy1(comma)
+  .between(left)(right)
+  .map(values => JArray.of(values))
+  .setLabel('array');

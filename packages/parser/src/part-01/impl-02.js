@@ -7,8 +7,7 @@
 const pchar = (chr, str) => {
   if (!str) {
     return ['No more input', ''];
-  }
-  else if (str[0] === chr) {
+  } else if (str[0] === chr) {
     return [`Found ${chr}`, str.slice(1)];
   } else {
     return [`Expecting '${chr}'. Got '${str[0]}'`, str];

@@ -7,8 +7,7 @@
 const A_Parser = str => {
   if (!str) {
     return [false, ''];
-  }
-  else if (str[0] === 'A') {
+  } else if (str[0] === 'A') {
     return [true, str.slice(1)];
   } else {
     return [false, str];

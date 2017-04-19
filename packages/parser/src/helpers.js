@@ -7,15 +7,19 @@ const { Success, Failure } = Validation;
 
 export const satisfy = (predicate, label) =>
   Parser.of(input => {
-    const [ remainingInput, charOpt ] = input.nextChar();
+    const [remainingInput, charOpt] = input.nextChar();
     return charOpt.cata({
       Nothing: () => {
         return Failure([label, 'No more input', input.getParserPosition()]);
       },
       Just: first => {
-        return (predicate(first)) ?
-          Success([first, remainingInput]) :
-          Failure([label, `Unexpected '${first}'`, input.getParserPosition()])
+        return predicate(first)
+          ? Success([first, remainingInput])
+          : Failure([
+              label,
+              `Unexpected '${first}'`,
+              input.getParserPosition()
+            ]);
       }
     });
   }, label);
@@ -43,29 +47,34 @@ export const spaces1 = whitespaceChar.many1();
 
 // Forward references
 export const createParserForwardedToRef = () => {
-  const dummyParser = Parser.of((/*input*/) => {
-    throw new Error('unfixed forwarded parser');
-  }, 'unknown');
+  const dummyParser = Parser.of(
+    (/*input*/) => {
+      throw new Error('unfixed forwarded parser');
+    },
+    'unknown'
+  );
   let parserRef = { parser: dummyParser };
   const wrapperParser = Parser.of(input => parserRef.parser.runOnInput(input));
   wrapperParser.ref = parserRef;
   return wrapperParser;
-}
+};
 
 export const printResult = result => {
   result.cata({
-    Success: ([ value/*, input */]) => console.log(value),
-    Failure: ([ label, error, pos ]) => {
+    Success: ([value /*, input */]) => console.log(value),
+    Failure: ([label, error, pos]) => {
       const [errorLine, line, column] = pos;
       const info = `Line:${line} Col:${column} Error parsing ${label}`;
       console.log(`${info}\n${errorLine}\n${' '.repeat(column)}^ ${error}`);
     }
   });
-}
+};
 
 // Non parser helper
 export const range = (start, end) =>
-  Array.from({
-    length: (end.charCodeAt(0) - start.charCodeAt(0) + 1)
-  }, (v, k) =>
-    String.fromCharCode(k + start.charCodeAt(0)));
+  Array.from(
+    {
+      length: end.charCodeAt(0) - start.charCodeAt(0) + 1
+    },
+    (v, k) => String.fromCharCode(k + start.charCodeAt(0))
+  );

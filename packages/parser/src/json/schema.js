@@ -1,11 +1,11 @@
 export class Token {
-  static of (...args) {
+  static of(...args) {
     return new this(...args);
   }
 }
 
 export class ValuedToken extends Token {
-  constructor (value) {
+  constructor(value) {
     super();
     this.value = value;
   }

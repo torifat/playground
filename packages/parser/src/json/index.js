@@ -8,9 +8,7 @@ import jValue from './jValue';
 import { printResult } from '../helpers';
 import { choice } from '../anyOf';
 
-jValue.ref.parser = choice([
-  jNull, jBool, jNumber, jString, jArray, jObject
-]);
+jValue.ref.parser = choice([jNull, jBool, jNumber, jString, jArray, jObject]);
 
 const example1 = `{
   "name" : "Scott",

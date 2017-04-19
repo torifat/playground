@@ -2,44 +2,50 @@ import Validation from 'data.validation';
 const { Success, Failure } = Validation;
 
 class Parser {
-  constructor (fn) {
+  constructor(fn) {
     this.fn = fn;
   }
 
-  static of (fn) {
+  static of(fn) {
     return new this(fn);
   }
 
-  parse (str) {
+  parse(str) {
     return this.fn(str);
   }
 
-  andThen (anotherParser) {
-    return Parser.of(str => this.parse(str).cata({
-      Failure: Failure,
-      Success: ([value1, remaining1]) => anotherParser.parse(remaining1).cata({
+  andThen(anotherParser) {
+    return Parser.of(str =>
+      this.parse(str).cata({
         Failure: Failure,
-        Success: ([value2, remaining2]) => Success([[value1, value2], remaining2])
+        Success: ([value1, remaining1]) =>
+          anotherParser.parse(remaining1).cata({
+            Failure: Failure,
+            Success: ([value2, remaining2]) =>
+              Success([[value1, value2], remaining2])
+          })
       })
-    }));
+    );
   }
 
-  orElse (anotherParser) {
-    return Parser.of(str => this.parse(str).orElse(() => anotherParser.parse(str)));
+  orElse(anotherParser) {
+    return Parser.of(str =>
+      this.parse(str).orElse(() => anotherParser.parse(str))
+    );
   }
 }
 
 // pchar :: string -> Parser
-const pchar = chr => Parser.of(str => {
-  if (!str) {
-    return Failure(['No more input']);
-  }
-  else if (str[0] === chr) {
-    return Success([chr, str.slice(1)]);
-  } else {
-    return Failure([`Expecting '${chr}'. Got '${str[0]}'`]);
-  }
-});
+const pchar = chr =>
+  Parser.of(str => {
+    if (!str) {
+      return Failure(['No more input']);
+    } else if (str[0] === chr) {
+      return Success([chr, str.slice(1)]);
+    } else {
+      return Failure([`Expecting '${chr}'. Got '${str[0]}'`]);
+    }
+  });
 
 // run :: Parser -> Result<[string, string], string>
 const run = parser => parser.parse.bind(parser);
@@ -70,7 +76,6 @@ console.log(run(parseAThenB)(input));
 input = null;
 console.log(run(parseAThenB)(input));
 
-
 console.log('orElse');
 
 input = 'AZZ';
@@ -88,7 +93,6 @@ console.log(run(parseAOrElseB)(input));
 input = null;
 console.log(run(parseAOrElseB)(input));
 
-
 console.log('andThenOr');
 
 input = 'ABZ';
@@ -105,7 +109,6 @@ console.log(run(parseAAndThenBorC)(input));
 
 input = 'AQZ';
 console.log(run(parseAAndThenBorC)(input));
-
 
 // Choose any of a list of parsers
 const choice = listOfParsers => listOfParsers.reduce((a, b) => a.orElse(b));

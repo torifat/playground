@@ -19,6 +19,8 @@ const keyValues = keyValue.sepBy1(comma);
 
 // set up the main parser
 // jObject
-export default keyValues.between(left)(right)
-.map(values => new Map(values))
-.map(values => JObject.of(values)).setLabel('object');
+export default keyValues
+  .between(left)(right)
+  .map(values => new Map(values))
+  .map(values => JObject.of(values))
+  .setLabel('object');
