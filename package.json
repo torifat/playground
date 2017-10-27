@@ -1,13 +1,10 @@
 {
-  "name": "playground",
-  "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT",
+  "private": true,
   "scripts": {
-    "bootstrap": "lerna bootstrap",
     "test": "jest && codecov",
     "precommit": "lint-staged"
   },
+  "dependencies": {},
   "devDependencies": {
     "babel-eslint": "^7.2.2",
     "babel-jest": "^19.0.0",
@@ -17,12 +14,14 @@
     "eslint-plugin-jest": "^19.0.1",
     "husky": "^0.13.3",
     "jest": "^19.0.2",
-    "lerna": "2.0.0-rc.2",
     "lint-staged": "^3.4.0",
     "prettier": "^1.1.0",
     "rollup": "^0.41.6",
     "rollup-watch": "^3.2.2"
   },
+  "workspaces": [
+    "packages/*"
+  ],
   "jest": {
     "testRegex": "/__tests__/(?!__).*",
     "bail": true,
@@ -37,7 +36,6 @@
     "coverageDirectory": "./coverage/",
     "collectCoverage": true
   },
-  "dependencies": {},
   "lint-staged": {
     "*.js": [
       "prettier --single-quote --write",
