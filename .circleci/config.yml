@@ -3,8 +3,9 @@ jobs:
   build:
     working_directory: ~/playground
     docker:
-      - image: node:7.9.0
+      - image: node
     steps:
       - checkout
+      - run: curl -o- -L https://yarnpkg.com/install.sh | bash -s
       - run: yarn install
       - run: yarn test
