@@ -2,7 +2,6 @@ import pchar from '../src/pchar';
 import { _s, _ec } from './__helpers';
 
 describe('Parser', () => {
-
   describe('andThen', () => {
     const parseAB = pchar('A').andThen(pchar('B'));
 
@@ -38,12 +37,16 @@ describe('Parser', () => {
 
   describe('map', () => {
     it('should map f on Success value', () => {
-      const result = pchar('A').map(c => c.toLowerCase()).parse('ABC');
+      const result = pchar('A')
+        .map(c => c.toLowerCase())
+        .parse('ABC');
       expect(result.value).toEqual(_s('a', ['ABC'], 1));
     });
 
     it('should not map f on Failure value', () => {
-      const result = pchar('A').map(c => c.toLowerCase()).parse('BAC');
+      const result = pchar('A')
+        .map(c => c.toLowerCase())
+        .parse('BAC');
       expect(result.value).toEqual(_ec('A', 'B', 'BAC', 0));
       expect(result.isFailure).toBeTruthy();
     });
@@ -55,7 +58,9 @@ describe('Parser', () => {
     it('should match zero or more occurences of the specified parser', () => {
       expect(manyA.parse('ABCD').value).toEqual(_s(['A'], ['ABCD'], 1));
       expect(manyA.parse('AACD').value).toEqual(_s(['A', 'A'], ['AACD'], 2));
-      expect(manyA.parse('AAAD').value).toEqual(_s(['A', 'A', 'A'], ['AAAD'], 3));
+      expect(manyA.parse('AAAD').value).toEqual(
+        _s(['A', 'A', 'A'], ['AAAD'], 3)
+      );
     });
 
     it('should not fail when there is no match', () => {
@@ -69,7 +74,9 @@ describe('Parser', () => {
     it('should match one or more occurences of the specified parser', () => {
       expect(many1A.parse('ABCD').value).toEqual(_s(['A'], ['ABCD'], 1));
       expect(many1A.parse('AACD').value).toEqual(_s(['A', 'A'], ['AACD'], 2));
-      expect(many1A.parse('AAAD').value).toEqual(_s(['A', 'A', 'A'], ['AAAD'], 3));
+      expect(many1A.parse('AAAD').value).toEqual(
+        _s(['A', 'A', 'A'], ['AAAD'], 3)
+      );
     });
 
     it('should not fail when there is no match', () => {
@@ -115,10 +122,12 @@ describe('Parser', () => {
 
     it('should parse zero or more occurrences of p separated by sep', () => {
       expect(parseListOfA.parse('A').value).toEqual(_s(['A'], ['A'], 1));
-      expect(parseListOfA.parse('A,A,A').value)
-        .toEqual(_s(['A', 'A', 'A'], ['A,A,A'], 5));
-      expect(parseListOfA.parse('A,A,B').value)
-        .toEqual(_s(['A', 'A'], ['A,A,B'], 3));
+      expect(parseListOfA.parse('A,A,A').value).toEqual(
+        _s(['A', 'A', 'A'], ['A,A,A'], 5)
+      );
+      expect(parseListOfA.parse('A,A,B').value).toEqual(
+        _s(['A', 'A'], ['A,A,B'], 3)
+      );
     });
 
     it('should not fail when there is no match', () => {
@@ -131,10 +140,12 @@ describe('Parser', () => {
 
     it('should parse one or more occurrences of p separated by sep', () => {
       expect(parseListOfA.parse('A').value).toEqual(_s(['A'], ['A'], 1));
-      expect(parseListOfA.parse('A,A,A').value)
-        .toEqual(_s(['A', 'A', 'A'], ['A,A,A'], 5));
-      expect(parseListOfA.parse('A,A,B').value)
-        .toEqual(_s(['A', 'A'], ['A,A,B'], 3));
+      expect(parseListOfA.parse('A,A,A').value).toEqual(
+        _s(['A', 'A', 'A'], ['A,A,A'], 5)
+      );
+      expect(parseListOfA.parse('A,A,B').value).toEqual(
+        _s(['A', 'A'], ['A,A,B'], 3)
+      );
     });
 
     it('should handle failure', () => {

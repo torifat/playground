@@ -1,7 +1,13 @@
-import pchar from '../pchar';
-import pstring from '../pstring';
-import { satisfy, manyChars, manyChars1, isDigit, spaces1 } from '../helpers';
-
+import {
+  pchar,
+  pstring,
+  id,
+  satisfy,
+  manyChars,
+  manyChars1,
+  isDigit,
+  spaces1,
+} from '@playground/parser';
 import { JNumber } from './schema';
 
 // Number
@@ -28,9 +34,8 @@ const exponentPart = e.andThenRight(optPlusMinus).andThen(oneOrMoreDigits);
 const optToString = opt => f =>
   opt.cata({
     Nothing: () => '',
-    Just: f
+    Just: f,
   });
-const id = x => x;
 
 const convertToJNumber = ([[[optSign, intPart], fractionPart], expPart]) => {
   // e.g. "-"

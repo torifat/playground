@@ -40,6 +40,8 @@ describe('pfloat', () => {
   });
 
   it('should optionally handle negative number', () => {
-    expect(pfloat.parse('-123.45Z').value).toEqual(_s(-123.45, ['-123.45Z'], 7));
+    expect(pfloat.parse('-123.45Z').value).toEqual(
+      _s(-123.45, ['-123.45Z'], 7)
+    );
   });
 });

@@ -22,8 +22,8 @@ class Parser {
           anotherParser.parse(remaining1).cata({
             Failure: Failure,
             Success: ([value2, remaining2]) =>
-              Success([[value1, value2], remaining2])
-          })
+              Success([[value1, value2], remaining2]),
+          }),
       })
     );
   }

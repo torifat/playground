@@ -1,5 +1,4 @@
-import pchar from '../pchar';
-import { spaces } from '../helpers';
+import { spaces, pchar } from '@playground/parser';
 
 import { JObject } from './schema';
 import { quotedString } from './jString';

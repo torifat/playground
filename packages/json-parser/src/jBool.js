@@ -1,4 +1,4 @@
-import pstring from '../pstring';
+import { pstring } from '@playground/parser';
 
 import { JBool } from './schema';
 

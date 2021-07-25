@@ -12,13 +12,11 @@ export default class Parser {
     this.label = label;
   }
 
-  // Update the label in the parser
   setLabel(label) {
     this.label = label;
     return this;
   }
 
-  // Update the label in the parser
   getLabel() {
     return this.label;
   }
@@ -38,24 +36,23 @@ export default class Parser {
   parseZeroOrMore(input) {
     return this.runOnInput(input).cata({
       Failure: () => [[], input],
-      Success: ([firstValue, inputAfterFirstParse]) => {
+      Success: ([firstValue, inputAfterFirstParse, label]) => {
         // if parse succeeds, call recursively to get the subsequent values
-        const [subsequentValues, remainingInput] = this.parseZeroOrMore(
-          inputAfterFirstParse
-        );
-        return [[firstValue, ...subsequentValues], remainingInput];
-      }
+        const [subsequentValues, remainingInput] =
+          this.parseZeroOrMore(inputAfterFirstParse);
+        return [[firstValue, ...subsequentValues], remainingInput, label];
+      },
     });
   }
 
-  // match zero or more occurences of the specified parser
+  // match zero or more occurrences of the specified parser
   // :: Parser<A> -> Parser<[A]>
   many() {
     // parse the input -- wrap in Success as it always succeeds
-    return Parser.of(input => Success(this.parseZeroOrMore(input)));
+    return Parser.of(input => Success(this.parseZeroOrMore(input)), this.label);
   }
 
-  // match one or more occurences of the specified parser
+  // match one or more occurrences of the specified parser
   // :: Parser<A> -> Parser<[A]>
   many1() {
     return this.bind(head =>
@@ -74,7 +71,7 @@ export default class Parser {
   }
 
   andThen(otherParser) {
-    const label = `${this.getLabel()} andThen ${otherParser.getLabel}`;
+    const label = `${this.getLabel()} andThen ${otherParser.getLabel()}`;
     return this.bind(p1Result =>
       otherParser.bind(p2Result => Parser.return([p1Result, p2Result]))
     ).setLabel(label);
@@ -89,7 +86,7 @@ export default class Parser {
   }
 
   orElse(otherParser) {
-    const label = `${this.getLabel()} orElse ${otherParser.getLabel}`;
+    const label = `${this.label} orElse ${otherParser.getLabel()}`;
     return Parser.of(
       str => this.runOnInput(str).orElse(() => otherParser.runOnInput(str)),
       label
@@ -98,7 +95,7 @@ export default class Parser {
 
   // :: f:(A -> B) -> Parser<A> -> Parser<B>
   map(f) {
-    return this.bind(x => Parser.return(f(x)));
+    return this.bind(x => Parser.return(f(x), this.label));
     // old implementation without bind
     // return Parser.of(input => this.parse(input).map(
     //   ([value, remaining]) => [f(value), remaining]
@@ -108,13 +105,15 @@ export default class Parser {
   // apply a wrapped function to a wrapped value
   // :: Parser<(A -> B)> -> Parser<A> -> Parser<B>
   apply(otherParser) {
-    return this.bind(f => otherParser.bind(x => Parser.return(f(x))));
+    return this.bind(f =>
+      otherParser.bind(x => Parser.return(f(x), this.label))
+    );
     // old implementation without bind
     // return this.andThen(otherParser).map(([f, x]) => f(x));
   }
 
   opt() {
-    return this.map(Just).orElse(Parser.return(Nothing()));
+    return this.map(Just).orElse(Parser.return(Nothing(), this.label));
   }
 
   // Keep only the result of the left side parser
@@ -138,13 +137,13 @@ export default class Parser {
   sepBy1(sepParser) {
     return this.andThen(sepParser.andThenRight(this).many()).map(([a, arr]) => [
       a,
-      ...arr
+      ...arr,
     ]);
   }
 
   // Parses zero or more occurrences of p separated by sep
   sepBy(sepParser) {
-    return this.sepBy1(sepParser).orElse(Parser.return([]));
+    return this.sepBy1(sepParser).orElse(Parser.return([], this.label));
   }
 
   // "bind" takes a parser-producing function f, and a parser p
@@ -156,8 +155,8 @@ export default class Parser {
         this.runOnInput(input).cata({
           // return error from parser1
           Failure: Failure,
-          Success: ([value1, remainingInput]) =>
-            f(value1).runOnInput(remainingInput)
+          Success: ([value1, remainingInput, label]) =>
+            f(value1).setLabel(label).runOnInput(remainingInput),
         }),
       this.label
     );
@@ -168,14 +167,14 @@ export default class Parser {
   }
 
   // :: A -> Parser<A>
-  static return(value) {
-    return Parser.of(input => Validation.of([value, input]));
+  static return(value, label) {
+    return Parser.of(input => Validation.of([value, input, label]), label);
   }
 
   // :: f:(A -> B -> C) -> Parser<A> -> Parser<B> -> Parser<C>
   static lift2(f) {
     return otherParser => anotherParser =>
-      Parser.return(f).apply(otherParser).apply(anotherParser);
+      Parser.return(f, this.label).apply(otherParser).apply(anotherParser);
   }
 
   // :: [Parser<A>] -> Parser<[A]>
@@ -184,7 +183,7 @@ export default class Parser {
     const consP = Parser.lift2(cons);
 
     if (!list || list.length === 0) {
-      return Parser.return([]);
+      return Parser.return([], this.label);
     }
     const [head, ...tail] = list;
     return consP(head)(Parser.sequence(tail));

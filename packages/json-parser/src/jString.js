@@ -1,7 +1,12 @@
-import pchar from '../pchar';
-import pstring from '../pstring';
-import anyOf, { choice } from '../anyOf';
-import { satisfy, range, manyChars } from '../helpers';
+import {
+  pchar,
+  pstring,
+  anyOf,
+  choice,
+  satisfy,
+  range,
+  manyChars,
+} from '@playground/parser';
 
 import { JString } from './schema';
 
@@ -21,7 +26,7 @@ const jEscapedChar = choice(
     ['f', '\f'], // formfeed
     ['n', '\n'], // newline
     ['r', '\r'], // cr
-    ['t', '\t'] // tab
+    ['t', '\t'], // tab
   ].map(([toMatch, result]) => pstring(`\\${toMatch}`).map(() => result))
 ).setLabel('escaped char');
 
@@ -57,4 +62,4 @@ export const quotedString = quote
 // jString
 export default quotedString
   .map(value => JString.of(value))
-  .setLabel('quoted strin');
+  .setLabel('quoted string');

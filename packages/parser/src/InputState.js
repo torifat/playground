@@ -10,7 +10,10 @@ export default class InputState {
   }
 
   currentLine() {
-    const { lines, position: { line } } = this;
+    const {
+      lines,
+      position: { line },
+    } = this;
     return line < lines.length ? lines[line] : 'EOF';
   }
 
@@ -18,7 +21,10 @@ export default class InputState {
   /// else return None. Also return the updated InputState
   /// Signature: InputState -> InputState * char option
   nextChar() {
-    const { lines, position: { line, column } } = this;
+    const {
+      lines,
+      position: { line, column },
+    } = this;
     // three cases
     // 1) if line >= maxLine ->
     //       return EOF

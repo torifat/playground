@@ -1,5 +1,5 @@
 export default class Location {
-  constructor(row: number, column: number) {
+  constructor(row, column) {
     this.row = row;
     this.column = column;
   }

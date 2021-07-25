@@ -3,12 +3,5 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
-  "scripts": {
-    "build": "rollup -c node:@playground/rollup-config",
-    "watch": "rollup -w -c node:@playground/rollup-config"
-  },
-  "devDependencies": {
-    "@playground/babel-preset": "^1.0.0",
-    "@playground/rollup-config": "^1.0.0"
-  }
+  "scripts": {}
 }

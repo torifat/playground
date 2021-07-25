@@ -1,5 +1,4 @@
-import pchar from '../pchar';
-import { spaces } from '../helpers';
+import { pchar, spaces } from '@playground/parser';
 
 import { JArray } from './schema';
 import jValue from './jValue';

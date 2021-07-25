@@ -5,10 +5,12 @@ import jNumber from './jNumber';
 import jArray from './jArray';
 import jObject from './jObject';
 import jValue from './jValue';
-import { printResult } from '../helpers';
-import { choice } from '../anyOf';
+import { printResult, choice } from '@playground/parser';
 
 jValue.ref.parser = choice([jNull, jBool, jNumber, jString, jArray, jObject]);
+
+// JSON parser
+export default jValue;
 
 const example1 = `{
   "name" : "Scott",
@@ -44,5 +46,5 @@ const example2 = `{"widget": {
     }
 }}`;
 
-// printResult(jValue.parse(example1));
+printResult(jValue.parse(example1));
 printResult(jValue.parse(example2));
